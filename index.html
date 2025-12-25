@@ -1,13 +1,1720 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>豪情云天</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --primary-gradient: linear-gradient(135deg, #4a6fa5, #688ec3);
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #FFc107;
+            --info-color: #17a2b8;
+            --light-color: #e6f7ff;
+            --dark-color: #343a40;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --bg-color: #f5f7fa;
+            --card-bg: #e6f7ff;
+            --text-color: #333333;
+            --text-light: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 3px;
+            padding: 25px 30px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 32px;
+            font-weight: 700;
+            background: none;
+            margin: 0;
+        }
+
+        .header-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 500px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background-color: #f0f5ff;
+            color: var(--primary-color);
+            border: 1px solid rgba(74, 111, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #e0ebff;
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-filter {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            flex: 1;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-filter.active {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .btn-filter.active .count-badge {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .count-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .navigation-container {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .navigation-container.expanded {
+            display: block;
+        }
+
+        .navigation-header {
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .navigation-header span {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+
+        .nav-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+        }
+
+        .nav-toggle-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .navigation-content {
+            max-height: 300px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 1;
+            background-color: var(--card-bg);
+        }
+
+        .navigation-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .nav-list {
+            padding: 15px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-item {
+            background-color: var(--light-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .nav-item.completed {
+            opacity: 0.7;
+            text-decoration: line-through;
+        }
+
+        .nav-count-badge {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: inherit;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .nav-item.active .nav-count-badge {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        .back-to-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 100;
+        }
+
+        .back-to-top-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top-btn:hover {
+            background-color: #3a5a8c;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-to-top-btn:active {
+            transform: translateY(0);
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 3px; /* 便签之间的间隔距离，修改这个值调整间距 */
+            margin-bottom: 30px;
+        margin-top: 3px;
+        }
+
+        .note-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: 0 8px 30px var(--shadow-color);
+            padding: 25px;
+            min-height: 300px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            scroll-margin-top: 100px;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .note-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .note-date {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 3px;
+        }
+
+        .note-content {
+            line-height: 1.7;
+            margin-bottom: 20px;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+
+        .note-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end;
+        }
+
+        .control-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-color);
+        }
+
+        .control-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .completed-note {
+            opacity: 0.7;
+        }
+
+        .completed-note .note-title, 
+        .completed-note .note-content {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        /* 组全部完成时的样式 */
+        .group-completed .note-title {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        .group-completed {
+            opacity: 0.7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg); /* 修改为与便签相同的背景色 */
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: modalOpen 0.3s ease;
+        }
+
+        @keyframes modalOpen {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: var(--danger-color);
+        }
+
+        .modal-header {
+            padding: 25px 30px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            padding: 20px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: inherit;
+  background-color: var(--card-bg);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            padding: 15px 30px 25px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: white;
+            color: var(--primary-color);
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* 便签组相关样式 */
+        .group-note {
+            padding: 20px;
+            background-color: #e6f7ff;
+        }
+
+        .sections-table {
+            width: 100%;
+            margin: 15px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section-row {
+            display: grid;
+            grid-template-columns: 70% 30%;
+            min-height: 48px;
+            padding: 13px 16px;
+            border: 2px solid var(--border-color); /* 添加边框 */
+            border-radius: 25px; /* 圆角与输入框一致 */
+            margin-bottom: 1px; /* 任务之间的间距 */
+            background-color: #e6f7ff;
+            transition: all 0.3s ease;
+        }
+
+        .section-row:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+        }
+
+        .header-row {
+            font-weight: 600;
+            background-color: rgba(0,0,0,0.03);
+            border-bottom: 2px solid var(--border-color);
+            color: var(--dark-color);
+        }
+
+        .section-cell {
+            padding: 5px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            min-height: 38px;
+        }
+
+        .section-title {
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .section-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 0;
+        }
+
+        .progress-container .progress-bar {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .progress-container .progress-indicator {
+            font-size: 13px;
+            color: var(--text-color);
+            background: rgba(0,0,0,0.05);
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* 模态框内便签组编辑样式 */
+        .group-modal-content {
+            max-width: 850px;
+            width: 90%;
+        }
+
+        .section-table-header {
+            display: grid;
+            grid-template-columns: 85% 15%;
+            margin: 15px 0 10px;
+            font-weight: 600;
+            color: #666;
+            padding: 0 5px;
+        }
+
+        .sections-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 5px;
+        }
+
+        .section-item {
+            display: grid;
+            grid-template-columns: 85% 20%;
+            gap: 6px;
+            min-height: 60px;
+            margin-bottom: 1px;
+            padding: 12px;
+            align-items: start;
+            transition: all 0.3s ease;
+        }
+
+        .section-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+        }
+
+        .section-item .form-input, 
+        .section-item .form-textarea {
+            width: 100%;
+            margin: 0;
+        }
+
+        .section-item .form-textarea {
+            min-height: 60px;
+        }
+
+        .remove-section-btn {
+            height: 38px;
+            width: 38px;
+            background: #ffedee;
+            color: var(--danger-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+        }
+
+        .completed-section .section-title,
+        .completed-section .section-content {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        .no-notes {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 3px;
+            }
+            
+            .header-main {
+                flex-direction: column;
+                text-align: center;
+                gap: 3px;
+            }
+            
+            .header-buttons {
+                min-width: 100%;
+            }
+            
+            .button-row {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .section-row {
+                grid-template-columns: 65% 35%;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+            .section-item {
+                grid-template-columns: 80% 20%;
+            }
+            .section-table-header {
+                grid-template-columns: 80% 20%;
+            }
+            
+            .nav-list {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .nav-item {
+                justify-content: space-between;
+            }
+            
+            .back-to-top-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-main">
+                <h1>
+                    <a href="https://1-1-1.u3280308.nyat.app:45095/" target="_blank">
+                        <i class="fas fa-thumbs-up"></i>
+                        豪情云天
+                    </a>
+                </h1>
+                <div class="header-buttons">
+                    <div class="button-row">
+                        <button id="toggle-nav-btn" class="btn btn-filter">
+                            <i class="fas fa-bars"></i>目录
+                        </button>
+                        <button id="filter-all" class="btn btn-filter active">
+                            全部<span class="count-badge" id="count-all">0</span>
+                        </button>
+                        <button id="filter-uncompleted" class="btn btn-filter">
+                            未完<span class="count-badge" id="count-uncompleted">0</span>
+                        </button>
+                        <button id="filter-completed" class="btn btn-filter">
+                            已完<span class="count-badge" id="count-completed">0</span>
+                        </button>
+                        <button id="delete-all-btn" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i>清空
+                        </button>
+                    </div>
+                    <div class="button-row">
+                        <button id="create-group-btn" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i>新建便签
+                        </button>
+                        <button id="sort-date-btn" class="btn btn-secondary">
+                            <i class="fas fa-sort-amount-down"></i>日期排序
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-container" id="navigation-container">
+            <div class="navigation-header">
+                <span>目录导航</span>
+                <button class="nav-toggle-btn">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            <div class="navigation-content collapsed" id="navigation-content">
+                <div class="nav-list" id="nav-list">
+                </div>
+            </div>
+        </div>
+
+        <div class="notes-grid" id="notes-container">
+            
+            <div class="no-notes" id="no-notes-message">
+                <i class="fas fa-sticky-note fa-2x" style="margin-bottom: 15px; color: #ccc;"></i>
+                <p>暂无便签，点击创建便签</p>
+            </div>
+        </div>
+
+        <div class="pagination" id="pagination-container">
+            
+        </div>
+    </div>
+
+    <div id="group-modal" class="modal">
+        <div class="modal-content group-modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h2 class="modal-title" id="group-modal-title">新建便签</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="group-title">便签标题</label>
+                    <input type="text" id="group-title" class="form-input" placeholder="输入便签标题">
+                </div>
+                
+                <div class="section-table-header">
+                    <div>小节标题</div>
+                    <div>操作</div>
+                </div>
+                
+                <div id="sections-container" class="sections-container">
+                    <div class="section-item">
+                        <input type="text" class="section-title form-input" placeholder="请输入小节标题">
+                        <button class="remove-section-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 15px 0;">
+                    <button id="add-section-btn" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> 新建小节
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn cancel-btn">取消</button>
+                <button class="btn btn-primary" id="save-group-btn">保存便签</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast-message">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-text">操作成功</span>
+    </div>
+    <button id="back-to-top" class="back-to-top-btn">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 数据管理
+            let notes = JSON.parse(localStorage.getItem('smartNotes')) || [];
+            
+            // 初始化数据：如果没有数据，则使用Excel导入的数据
+            if (notes.length === 0) {
+                // 从Excel导入的数据
+                const importedData = [{
+  "id": "20251223103951_sv5cap",
+  "type": "group",
+  "title": "986",
+  "sections": [
+    {      "title": "987",      "completed": false    },
+    {      "title": "988",      "completed": false    },
+    {      "title": "989",      "completed": false    },
+    {      "title": "990",      "completed": false    },
+    {      "title": "991",      "completed": false    },
+    {      "title": "992",      "completed": false    }
+  ],
+  "createdAt": "2025-12-23T10:39:51",
+  "updatedAt": "2025-12-23T10:39:51"
+},{
+  "id": "20251223103951_sr51ep",
+  "type": "group",
+  "title": "987",
+  "sections": [
+    {      "title": "988",      "completed": false    },
+    {      "title": "989",      "completed": false    },
+    {      "title": "990",      "completed": false    },
+    {      "title": "991",      "completed": false    },
+    {      "title": "992",      "completed": false    },
+    {      "title": "993",      "completed": false    }
+  ],
+  "createdAt": "2025-12-23T10:39:51",
+  "updatedAt": "2025-12-23T10:39:51"
+},{
+  "id": "20251223103951_odxpvu",
+  "type": "group",
+  "title": "988",
+  "sections": [
+    {      "title": "989",      "completed": false    },
+    {      "title": "990",      "completed": false    },
+    {      "title": "991",      "completed": false    },
+    {      "title": "992",      "completed": false    },
+    {      "title": "993",      "completed": false    },
+    {      "title": "994",      "completed": false    }
+  ],
+  "createdAt": "2025-12-23T10:39:51",
+  "updatedAt": "2025-12-23T10:39:51"
+}];
+                notes = importedData;
+                localStorage.setItem('smartNotes', JSON.stringify(notes));
+            }
+            
+            let currentPage = 1;
+            let notesPerPage = 9;
+            let currentEditId = null;
+            let currentEditType = null; // 这里只处理 'group'
+            let currentFilter = 'all'; // 当前筛选状态: 'all', 'completed', 'uncompleted'
+            let sortByDate = true; // 排序方式: true为按日期排序，false为按标题排序
+            let isNavigationExpanded = false; // 导航栏是否展开
+
+            // 元素引用
+            const modals = document.querySelectorAll('.modal');
+            const closeButtons = document.querySelectorAll('.close');
+            const createGroupBtn = document.getElementById('create-group-btn');
+            const sortDateBtn = document.getElementById('sort-date-btn');
+            const deleteAllBtn = document.getElementById('delete-all-btn');
+            const groupModal = document.getElementById('group-modal');
+            const toast = document.getElementById('toast-message');
+            const notesContainer = document.getElementById('notes-container');
+            const paginationContainer = document.getElementById('pagination-container');
+            const noNotesMessage = document.getElementById('no-notes-message');
+            const filterAllBtn = document.getElementById('filter-all');
+            const filterUncompletedBtn = document.getElementById('filter-uncompleted');
+            const filterCompletedBtn = document.getElementById('filter-completed');
+            const countAllElement = document.getElementById('count-all');
+            const countUncompletedElement = document.getElementById('count-uncompleted');
+            const countCompletedElement = document.getElementById('count-completed');
+            // 导航栏相关元素
+            const toggleNavBtn = document.getElementById('toggle-nav-btn');
+            const navigationContainer = document.getElementById('navigation-container');
+            const navigationContent = document.getElementById('navigation-content');
+            const navList = document.getElementById('nav-list');
+            const navToggleBtn = document.querySelector('.nav-toggle-btn');
+            // 回到顶部按钮
+            const backToTopBtn = document.getElementById('back-to-top');
+            
+            // 初始化
+            renderNotes();
+            setupEventListeners();
+            updateToggleNavButton();
+
+            // 功能函数
+            function generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+            }
+
+            function formatDate(date) {
+                var dateObj = new Date(date);
+                var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+                var day = ('0' + dateObj.getDate()).slice(-2);
+                var weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+                var weekday = weekdays[dateObj.getDay()];
+                var hours = ('0' + dateObj.getHours()).slice(-2);
+                var minutes = ('0' + dateObj.getMinutes()).slice(-2);
+                return month + '月' + day + '日 ' + weekday + ' ' + hours + ':' + minutes;
+            }
+
+            function saveNotes() {
+                localStorage.setItem('smartNotes', JSON.stringify(notes));
+            }
+
+            function showToast(message, type = 'success') {
+                const toast = document.getElementById('toast-message');
+                const toastText = document.getElementById('toast-text');
+                const toastIcon = toast.querySelector('i');
+                
+                toastText.textContent = message;
+                
+                if (type === 'error') {
+                    toast.style.borderLeftColor = 'var(--danger-color)';
+                    toastIcon.className = 'fas fa-exclamation-circle';
+                } else if (type === 'warning') {
+                    toast.style.borderLeftColor = 'var(--warning-color)';
+                    toastIcon.className = 'fas fa-exclamation-triangle';
+                } else {
+                    toast.style.borderLeftColor = 'var(--primary-color)';
+                    toastIcon.className = 'fas fa-check-circle';
+                }
+                
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            function openModal(modal) {
+                modals.forEach(m => { m.style.display = 'none'; });
+                modal.style.display = 'flex';
+            }
+
+            function closeModal() {
+                modals.forEach(m => { m.style.display = 'none'; });
+                currentEditId = null;
+                currentEditType = null;
+                resetGroupForm();
+            }
+
+            function resetGroupForm() {
+                document.getElementById('group-modal-title').textContent = '新建便签';
+                document.getElementById('group-title').value = '';
+                
+                const sectionsContainer = document.getElementById('sections-container');
+                sectionsContainer.innerHTML = `
+                    <div class="section-item">
+                        <input type="text" class="section-title form-input" placeholder="请输入小节标题">
+                        <button class="remove-section-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                setupRemoveSectionButtons();
+            }
+
+            function setupRemoveSectionButtons() {
+                document.querySelectorAll('.remove-section-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const container = document.getElementById('sections-container');
+                        const item = this.closest('.section-item');
+                        if (container.children.length > 1) {
+                            container.removeChild(item);
+                        } else {
+                            showToast('至少需要保留一个小节', 'warning');
+                        }
+                    });
+                });
+            }
+
+            function getSectionsData() {
+                const sections = [];
+                const sectionItems = document.querySelectorAll('#sections-container .section-item');
+                
+                sectionItems.forEach(item => {
+                    const titleInput = item.querySelector('.section-title');
+                    
+                    if (titleInput.value.trim()) {
+                        sections.push({
+                            title: titleInput.value.trim(),
+                            completed: false
+                        });
+                    }
+                });
+                
+                return sections;
+            }
+
+            function createNoteCard(note) {
+                const noteCard = document.createElement('div');
+                
+                // 检查是否所有小节都已完成
+                const completedCount = note.sections ? note.sections.filter(s => s.completed).length : 0;
+                const totalCount = note.sections ? note.sections.length : 0;
+                const allCompleted = totalCount > 0 && completedCount === totalCount;
+                
+                noteCard.className = `note-card group-note ${allCompleted ? 'group-completed' : ''}`;
+                noteCard.dataset.id = note.id;
+                noteCard.id = 'note-' + note.id;
+                
+                const progressPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+                
+                const contentHTML = `
+                    <div class="note-header">
+                        <div>
+                            <h3 class="note-title">${note.title}</h3>
+                            <div class="note-date">${formatDate(note.createdAt)}</div>
+                        </div>
+                        <div class="note-controls">
+                            <button class="control-btn edit-btn" title="编辑"><i class="fas fa-edit"></i></button>
+                            <button class="control-btn delete-btn" title="删除"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progressPercentage}%"></div>
+                        </div>
+                        <span class="progress-indicator">${completedCount}/${totalCount}</span>
+                    </div>
+                    
+                    <div class="sections-table">
+                        <div class="section-row header-row">
+                            <div class="section-cell">任务</div>
+                            <div class="section-cell">完成</div>
+                        </div>
+                        
+                        ${note.sections && note.sections.length > 0 ? note.sections.map(section => `
+                            <div class="section-row ${section.completed ? 'completed-section' : ''}">
+                                <div class="section-cell section-title">${section.title}</div>
+                                <div class="section-cell section-status">
+                                    <input type="checkbox" class="section-checkbox" ${section.completed ? 'checked' : ''} data-section-id="${note.id}">
+                                </div>
+                            </div>
+                        `).join('') : '<div class="section-row"><div class="section-cell" colspan="2" style="text-align:center;padding:20px;">暂无任务</div></div>'}
+                    </div>
+                `;
+                
+                noteCard.innerHTML = contentHTML;
+                
+                // 添加事件监听器
+                const editBtn = noteCard.querySelector('.edit-btn');
+                const deleteBtn = noteCard.querySelector('.delete-btn');
+                
+                if (editBtn) {
+                    editBtn.addEventListener('click', () => editNote(note.id));
+                }
+                
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => deleteNote(note.id));
+                }
+                
+                // 任务组小节复选框事件
+                const sectionCheckboxes = noteCard.querySelectorAll('.section-checkbox');
+                sectionCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const noteId = this.dataset.sectionId;
+                        const sectionIndex = Array.from(this.closest('.sections-table').querySelectorAll('.section-checkbox')).indexOf(this);
+                        toggleSectionCompletion(noteId, sectionIndex);
+                    });
+                });
+                
+                return noteCard;
+            }
+
+            function getNoteCompletionStatus(note) {
+                if (!note.sections || note.sections.length === 0) return false;
+                const completedCount = note.sections.filter(s => s.completed).length;
+                return completedCount === note.sections.length;
+            }
+
+            function updateCounts() {
+                let allCount = notes.length;
+                let uncompletedCount = 0;
+                let completedCount = 0;
+                
+                notes.forEach(note => {
+                    if (getNoteCompletionStatus(note)) {
+                        completedCount++;
+                    } else {
+                        uncompletedCount++;
+                    }
+                });
+                
+                countAllElement.textContent = allCount;
+                countUncompletedElement.textContent = uncompletedCount;
+                countCompletedElement.textContent = completedCount;
+            }
+
+            function renderNavigation() {
+                // 清空导航列表
+                navList.innerHTML = '';
+                
+                // 过滤笔记（与renderNotes中的过滤逻辑保持一致）
+                let filteredNotes = notes.filter(note => {
+                    const isCompleted = getNoteCompletionStatus(note);
+                    
+                    if (currentFilter === 'completed' && !isCompleted) return false;
+                    if (currentFilter === 'uncompleted' && isCompleted) return false;
+                    
+                    return true;
+                });
+                
+                // 排序（与renderNotes中的排序逻辑保持一致）
+                filteredNotes.sort((a, b) => {
+                    const aCompleted = getNoteCompletionStatus(a);
+                    const bCompleted = getNoteCompletionStatus(b);
+                    
+                    if (aCompleted !== bCompleted) {
+                        return aCompleted ? 1 : -1;
+                    }
+                    
+                    if (sortByDate) {
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                    } else {
+                        return a.title.localeCompare(b.title);
+                    }
+                });
+                
+                // 生成导航项
+                filteredNotes.forEach((note, index) => {
+                    const navItem = document.createElement('a');
+                    const isCompleted = getNoteCompletionStatus(note);
+                    const completedCount = note.sections ? note.sections.filter(s => s.completed).length : 0;
+                    const totalCount = note.sections ? note.sections.length : 0;
+                    
+                    navItem.href = '#note-' + note.id;
+                    navItem.className = `nav-item ${isCompleted ? 'completed' : ''}`;
+                    navItem.innerHTML = `
+                        <span>${note.title}</span>
+                        <span class="nav-count-badge">${completedCount}/${totalCount}</span>
+                    `;
+                    
+                    // 点击导航项跳转到对应便签
+                    navItem.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // 计算便签所在的页面
+                        const page = Math.floor(index / notesPerPage) + 1;
+                        
+                        // 如果不在当前页，先切换到对应页面
+                        if (page !== currentPage) {
+                            currentPage = page;
+                            renderNotes();
+                            // 等待渲染完成后滚动
+                            setTimeout(() => {
+                                const targetNote = document.getElementById('note-' + note.id);
+                                if (targetNote) {
+                                    targetNote.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                            }, 100);
+                        } else {
+                            // 直接滚动到目标便签
+                            const targetNote = document.getElementById('note-' + note.id);
+                            if (targetNote) {
+                                targetNote.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }
+                        
+                        // 高亮当前导航项
+                        document.querySelectorAll('.nav-item').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                    });
+                    
+                    navList.appendChild(navItem);
+                });
+                
+                // 如果没有便签，显示提示信息
+                if (filteredNotes.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-nav-message';
+                    emptyMessage.textContent = '暂无目录';
+                    emptyMessage.style.padding = '20px';
+                    emptyMessage.style.textAlign = 'center';
+                    emptyMessage.style.color = 'var(--text-light)';
+                    navList.appendChild(emptyMessage);
+                }
+            }
+
+            // 导航栏展开/收起功能
+            function toggleNavigation() {
+                isNavigationExpanded = !isNavigationExpanded;
+                if (isNavigationExpanded) {
+                    navigationContainer.classList.add('expanded');
+                    navigationContent.classList.remove('collapsed');
+                    const icon = navToggleBtn.querySelector('i');
+                    icon.className = 'fas fa-chevron-up';
+                } else {
+                    navigationContainer.classList.remove('expanded');
+                    navigationContent.classList.add('collapsed');
+                    const icon = navToggleBtn.querySelector('i');
+                    icon.className = 'fas fa-chevron-down';
+                }
+                updateToggleNavButton();
+            }
+
+            function updateToggleNavButton() {
+                const icon = toggleNavBtn.querySelector('i');
+                if (isNavigationExpanded) {
+                    toggleNavBtn.classList.add('active');
+                    icon.className = 'fas fa-times';
+                } else {
+                    toggleNavBtn.classList.remove('active');
+                    icon.className = 'fas fa-bars';
+                }
+            }
+
+            // 回到顶部功能
+            function handleScroll() {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
+                }
+            }
+
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            function renderNotes() {
+                // 更新计数
+                updateCounts();
+                
+                // 渲染导航栏
+                renderNavigation();
+                
+                // 过滤笔记
+                let filteredNotes = notes.filter(note => {
+                    // 根据当前筛选状态过滤
+                    const isCompleted = getNoteCompletionStatus(note);
+                    
+                    if (currentFilter === 'completed' && !isCompleted) return false;
+                    if (currentFilter === 'uncompleted' && isCompleted) return false;
+                    
+                    return true;
+                });
+                
+                // 排序：未完成的排在前面，已完成的排在后面
+                filteredNotes.sort((a, b) => {
+                    const aCompleted = getNoteCompletionStatus(a);
+                    const bCompleted = getNoteCompletionStatus(b);
+                    
+                    // 首先按完成状态排序：未完成在前，完成在后
+                    if (aCompleted !== bCompleted) {
+                        return aCompleted ? 1 : -1;
+                    }
+                    
+                    // 然后按选择的排序方式排序
+                    if (sortByDate) {
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                    } else {
+                        return a.title.localeCompare(b.title);
+                    }
+                });
+                
+                // 分页
+                const totalPages = Math.ceil(filteredNotes.length / notesPerPage);
+                const startIndex = (currentPage - 1) * notesPerPage;
+                const endIndex = startIndex + notesPerPage;
+                const pageNotes = filteredNotes.slice(startIndex, endIndex);
+                
+                // 清空容器
+                notesContainer.innerHTML = '';
+                
+                // 显示或隐藏无笔记消息
+                if (pageNotes.length === 0) {
+                    noNotesMessage.style.display = 'block';
+                    notesContainer.appendChild(noNotesMessage);
+                } else {
+                    noNotesMessage.style.display = 'none';
+                    
+                    // 渲染笔记
+                    pageNotes.forEach(note => {
+                        notesContainer.appendChild(createNoteCard(note));
+                    });
+                }
+                
+                // 渲染分页
+                renderPagination(totalPages);
+            }
+
+            function renderPagination(totalPages) {
+                paginationContainer.innerHTML = '';
+                
+                if (totalPages <= 1) return;
+                
+                // 上一页按钮
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'page-btn';
+                prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevBtn.disabled = currentPage === 1;
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderNotes();
+                    }
+                });
+                paginationContainer.appendChild(prevBtn);
+                
+                // 页码按钮
+                const maxVisiblePages = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                
+                if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        renderNotes();
+                    });
+                    paginationContainer.appendChild(pageBtn);
+                }
+                
+                // 下一页按钮
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'page-btn';
+                nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextBtn.disabled = currentPage === totalPages;
+                nextBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        renderNotes();
+                    }
+                });
+                paginationContainer.appendChild(nextBtn);
+            }
+
+            function addGroup(groupData) {
+                const newGroup = {
+                    id: generateId(),
+                    type: 'group',
+                    title: groupData.title,
+                    sections: groupData.sections,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                notes.unshift(newGroup);
+                saveNotes();
+                currentPage = 1;
+                renderNotes();
+                showToast('创建成功');
+            }
+
+            function editNote(id) {
+                const noteIndex = notes.findIndex(note => note.id === id);
+                if (noteIndex === -1) return;
+                
+                const note = notes[noteIndex];
+                currentEditId = id;
+                currentEditType = 'group';
+                
+                document.getElementById('group-modal-title').textContent = '编辑便签';
+                document.getElementById('group-title').value = note.title;
+                
+                // 设置小节
+                const sectionsContainer = document.getElementById('sections-container');
+                sectionsContainer.innerHTML = '';
+                
+                if (note.sections && note.sections.length > 0) {
+                    note.sections.forEach(section => {
+                        const sectionItem = document.createElement('div');
+                        sectionItem.className = 'section-item';
+                        sectionItem.innerHTML = `
+                            <input type="text" class="section-title form-input" placeholder="小节标题" value="${section.title}">
+                            <button class="remove-section-btn"><i class="fas fa-trash"></i></button>
+                        `;
+                        sectionsContainer.appendChild(sectionItem);
+                    });
+                } else {
+                    sectionsContainer.innerHTML = `
+                        <div class="section-item">
+                            <input type="text" class="section-title form-input" placeholder="请输入小节标题">
+                            <button class="remove-section-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                }
+                
+                setupRemoveSectionButtons();
+                openModal(groupModal);
+            }
+
+            function updateNote() {
+                const noteIndex = notes.findIndex(note => note.id === currentEditId);
+                if (noteIndex === -1) return;
+                
+                notes[noteIndex].title = document.getElementById('group-title').value.trim();
+                notes[noteIndex].sections = getSectionsData();
+                notes[noteIndex].updatedAt = new Date().toISOString();
+                
+                saveNotes();
+                renderNotes();
+                showToast('便签已更新');
+                closeModal();
+            }
+
+            function deleteNote(id) {
+                if (confirm('确定要删除这个便签吗？此操作无法撤销。')) {
+                    notes = notes.filter(note => note.id !== id);
+                    saveNotes();
+                    renderNotes();
+                    showToast('便签已删除');
+                }
+            }
+
+            function deleteAllNotes() {
+                if (notes.length === 0) {
+                    showToast('当前没有可删除的便签', 'warning');
+                    return;
+                }
+                
+                if (confirm(`确定要删除所有便签吗？共 ${notes.length} 个便签将被删除，此操作无法撤销。`)) {
+                    notes = [];
+                    saveNotes();
+                    currentPage = 1;
+                    renderNotes();
+                    showToast('所有便签已删除');
+                }
+            }
+
+            function toggleSectionCompletion(noteId, sectionIndex) {
+                const noteIndex = notes.findIndex(note => note.id === noteId);
+                if (noteIndex === -1 || !notes[noteIndex].sections || sectionIndex >= notes[noteIndex].sections.length) return;
+                
+                // 获取便签标题和小节标题
+                const noteTitle = notes[noteIndex].title;
+                const sectionTitle = notes[noteIndex].sections[sectionIndex].title;
+                
+                // 检查当前状态（切换前的状态）
+                const isCurrentlyCompleted = notes[noteIndex].sections[sectionIndex].completed;
+                
+                // 更新小节完成状态
+                notes[noteIndex].sections[sectionIndex].completed = !notes[noteIndex].sections[sectionIndex].completed;
+                notes[noteIndex].updatedAt = new Date().toISOString();
+                
+                // 重新排序小节：已完成的小节移到最后面
+                const sections = notes[noteIndex].sections;
+                sections.sort((a, b) => {
+                    if (a.completed === b.completed) return 0;
+                    return a.completed ? 1 : -1;
+                });
+                notes[noteIndex].sections = sections;
+                
+                saveNotes();
+                renderNotes();
+                
+                // 显示提示信息
+                if (isCurrentlyCompleted) {
+                    // 之前是完成状态，现在是取消完成
+                    showToast(`${noteTitle} 路 ${sectionTitle} 家 取消拿货`);
+                } else {
+                    // 之前是未完成状态，现在是完成
+                    showToast(`${noteTitle} 路 ${sectionTitle} 家 完成拿货`);
+                }
+            }
+            
+            function setFilter(filter) {
+                currentFilter = filter;
+                currentPage = 1;
+                
+                // 更新按钮状态
+                document.querySelectorAll('.btn-filter').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                if (filter === 'all') {
+                    filterAllBtn.classList.add('active');
+                } else if (filter === 'uncompleted') {
+                    filterUncompletedBtn.classList.add('active');
+                } else if (filter === 'completed') {
+                    filterCompletedBtn.classList.add('active');
+                }
+                
+                renderNotes();
+            }
+            
+            function toggleSort() {
+                sortByDate = !sortByDate;
+                currentPage = 1;
+                
+                // 更新按钮文本
+                if (sortByDate) {
+                    sortDateBtn.innerHTML = '<i class="fas fa-sort-amount-down"></i> 日期排序';
+                } else {
+                    sortDateBtn.innerHTML = '<i class="fas fa-sort-alpha-down"></i> 标题排序';
+                }
+                
+                renderNotes();
+            }
+            
+            function setupEventListeners() {
+                // 模态框控制
+                closeButtons.forEach(btn => {
+                    btn.addEventListener('click', closeModal);
+                });
+                
+                window.addEventListener('click', function(event) {
+                    modals.forEach(modal => {
+                        if (event.target === modal) closeModal();
+                    });
+                });
+                
+                // 新建便签
+                createGroupBtn.addEventListener('click', () => {
+                    resetGroupForm();
+                    openModal(groupModal);
+                });
+                
+                // 删除全部按钮
+                deleteAllBtn.addEventListener('click', deleteAllNotes);
+                
+                // 排序按钮
+                sortDateBtn.addEventListener('click', toggleSort);
+                
+                // 筛选按钮
+                filterAllBtn.addEventListener('click', () => setFilter('all'));
+                filterUncompletedBtn.addEventListener('click', () => setFilter('uncompleted'));
+                filterCompletedBtn.addEventListener('click', () => setFilter('completed'));
+                
+                // 便签导航按钮
+                toggleNavBtn.addEventListener('click', toggleNavigation);
+                
+                // 导航栏标题点击事件
+                document.querySelector('.navigation-header').addEventListener('click', function() {
+                    if (isNavigationExpanded) {
+                        navigationContent.classList.toggle('collapsed');
+                        const icon = this.querySelector('.nav-toggle-btn i');
+                        if (navigationContent.classList.contains('collapsed')) {
+                            icon.className = 'fas fa-chevron-down';
+                        } else {
+                            icon.className = 'fas fa-chevron-up';
+                        }
+                    }
+                });
+                
+                // 回到顶部按钮
+                backToTopBtn.addEventListener('click', scrollToTop);
+                
+                // 滚动事件监听
+                window.addEventListener('scroll', handleScroll);
+                
+                // 保存便签
+                document.getElementById('save-group-btn').addEventListener('click', () => {
+                    const title = document.getElementById('group-title').value.trim();
+                    
+                    if (!title) {
+                        showToast('请输入便签标题', 'warning');
+                        return;
+                    }
+                    
+                    if (currentEditId) {
+                        updateNote();
+                    } else {
+                        const sections = getSectionsData();
+                        
+                        addGroup({
+                            title: title,
+                            sections: sections
+                        });
+                        
+                        closeModal();
+                    }
+                });
+                
+                // 新建小节
+                document.getElementById('add-section-btn').addEventListener('click', function() {
+                    const container = document.getElementById('sections-container');
+                    const newItem = document.createElement('div');
+                    newItem.className = 'section-item';
+                    newItem.innerHTML = `
+                        <input type="text" class="section-title form-input" placeholder="请输入小节标题">
+                        <button class="remove-section-btn"><i class="fas fa-trash"></i></button>
+                    `;
+                    container.appendChild(newItem);
+                    
+                    newItem.querySelector('.remove-section-btn').addEventListener('click', function() {
+                        if (container.children.length > 1) {
+                            container.removeChild(newItem);
+                        } else {
+                            showToast('至少需要保留一个小节', 'warning');
+                        }
+                    });
+                });
+                
+                // 取消按钮
+                document.querySelectorAll('.cancel-btn').forEach(btn => {
+                    btn.addEventListener('click', closeModal);
+                });
+                
+                // 初始化删除按钮
+                setupRemoveSectionButtons();
+            }
+        });
+    </script>
+</body>
 </html>
